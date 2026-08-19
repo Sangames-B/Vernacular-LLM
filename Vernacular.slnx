@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="vernacular.client/vernacular.client.esproj">
+    <Build />
+    <Deploy />
+  </Project>
+  <Project Path="Vernacular.Server/Vernacular.Server.csproj" />
+</Solution>

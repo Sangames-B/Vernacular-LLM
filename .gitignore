@@ -1,0 +1,5 @@
+# Visual Studio metadata folder
+.vs/
+
+# Node dependencies
+node_modules/
