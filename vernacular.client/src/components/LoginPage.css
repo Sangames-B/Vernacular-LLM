@@ -1,0 +1,472 @@
+/* Login Page Responsive Styles */
+
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+}
+
+.login-wrapper {
+  width: 100%;
+  max-width: 400px;
+  background: white;
+  border-radius: 12px;
+  padding: 40px 30px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Logo Section */
+.logo-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.logo-box {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(30, 60, 114, 0.2);
+}
+
+.mic-logo {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+}
+
+.red-dot {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 24px;
+  height: 24px;
+  background: #e74c3c;
+  border-radius: 50%;
+  border: 3px solid white;
+  box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
+}
+
+/* Header Section */
+.header-section {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.audio-engine-text {
+  font-size: 12px;
+  font-weight: 600;
+  color: #5b7cfe;
+  letter-spacing: 1.5px;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+.main-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1a202c;
+  margin: 0 0 8px 0;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #64748b;
+  margin: 0;
+}
+
+/* Role Selection */
+.role-selection-section {
+  margin-bottom: 25px;
+}
+
+.role-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1a202c;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+
+.role-buttons-container {
+  display: flex;
+  gap: 10px;
+}
+
+.role-button {
+  flex: 1;
+  padding: 12px 16px;
+  border: 2px solid #e2e8f0;
+  background: #f1f5fb;
+  color: #64748b;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.3s ease;
+}
+
+.role-button:hover {
+  border-color: #cbd5e1;
+  background: #e8f0fe;
+}
+
+.role-button.active {
+  background: linear-gradient(135deg, #5b7cfe 0%, #3a5cdb 100%);
+  color: white;
+  border-color: #5b7cfe;
+  font-weight: 600;
+}
+
+/* Info Box */
+.info-box {
+  background: linear-gradient(135deg, #e8f0fe 0%, #f0f4ff 100%);
+  border-left: 4px solid #5b7cfe;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 25px;
+  display: flex;
+  gap: 12px;
+}
+
+.info-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.info-text {
+  font-size: 13px;
+  color: #334155;
+  line-height: 1.5;
+}
+
+.info-text strong {
+  color: #1a202c;
+}
+
+/* Form Styles */
+.login-form {
+  margin-bottom: 25px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a202c;
+  margin-bottom: 8px;
+}
+
+.password-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.password-header label {
+  margin: 0;
+}
+
+.forgot-password {
+  font-size: 12px;
+  color: #5b7cfe;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.forgot-password:hover {
+  color: #3a5cdb;
+  text-decoration: underline;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 12px;
+  font-size: 18px;
+  pointer-events: none;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 12px 12px 40px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #1a202c;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #5b7cfe;
+  box-shadow: 0 0 0 3px rgba(91, 124, 254, 0.1);
+}
+
+.form-input::placeholder {
+  color: #94a3b8;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  transition: color 0.3s ease;
+}
+
+.password-toggle:hover {
+  color: #1a202c;
+}
+
+/* Checkbox */
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.checkbox-input {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #5b7cfe;
+}
+
+.checkbox-label {
+  font-size: 13px;
+  color: #1a202c;
+  cursor: pointer;
+  user-select: none;
+  margin: 0;
+}
+
+/* Sign In Button */
+.sign-in-button {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(26, 32, 44, 0.2);
+}
+
+.sign-in-button:hover {
+  background: linear-gradient(135deg, #0f172a 0%, #1a202c 100%);
+  box-shadow: 0 6px 16px rgba(26, 32, 44, 0.3);
+  transform: translateY(-2px);
+}
+
+.sign-in-button:active {
+  transform: translateY(0);
+}
+
+/* Security Info */
+.security-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding: 12px;
+  font-size: 11px;
+  color: #64748b;
+  text-align: center;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+
+.security-icon {
+  font-size: 16px;
+}
+
+.security-text {
+  line-height: 1.4;
+}
+
+/* Footer Links */
+.footer-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  padding-top: 15px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.footer-links a {
+  color: #64748b;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: #5b7cfe;
+  text-decoration: underline;
+}
+
+.separator {
+  color: #cbd5e1;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .login-wrapper {
+    padding: 30px 20px;
+    max-width: 100%;
+    border-radius: 8px;
+  }
+
+  .main-title {
+    font-size: 28px;
+  }
+
+  .subtitle {
+    font-size: 13px;
+  }
+
+  .role-buttons-container {
+    gap: 8px;
+  }
+
+  .role-button {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+
+  .form-input {
+    font-size: 16px; /* Prevents zoom on focus on mobile */
+    padding: 14px 12px 14px 40px;
+  }
+
+  .sign-in-button {
+    padding: 16px;
+    font-size: 14px;
+  }
+
+  .footer-links {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-container {
+    padding: 10px;
+  }
+
+  .login-wrapper {
+    padding: 25px 15px;
+    border-radius: 6px;
+  }
+
+  .logo-box {
+    width: 70px;
+    height: 70px;
+  }
+
+  .mic-logo {
+    width: 45px;
+    height: 45px;
+  }
+
+  .main-title {
+    font-size: 24px;
+    margin-bottom: 5px;
+  }
+
+  .audio-engine-text {
+    font-size: 11px;
+  }
+
+  .subtitle {
+    font-size: 12px;
+  }
+
+  .role-selection-section {
+    margin-bottom: 20px;
+  }
+
+  .role-buttons-container {
+    gap: 6px;
+  }
+
+  .role-button {
+    padding: 10px;
+    font-size: 11px;
+    gap: 4px;
+  }
+
+  .info-box {
+    padding: 12px;
+    font-size: 12px;
+  }
+
+  .form-group label {
+    font-size: 12px;
+  }
+
+  .form-input {
+    padding: 12px 12px 12px 38px;
+    font-size: 14px;
+  }
+
+  .sign-in-button {
+    padding: 14px;
+    font-size: 13px;
+  }
+
+  .security-info {
+    font-size: 10px;
+    padding: 10px;
+    gap: 6px;
+  }
+
+  .footer-links {
+    font-size: 12px;
+    gap: 6px;
+  }
+}

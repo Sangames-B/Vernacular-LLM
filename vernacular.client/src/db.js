@@ -9,7 +9,7 @@
 */
 
 const DB_NAME = 'AudioRecordingDB';
-const DB_VERSION = 2;
+const DB_VERSION = 1;
 const STORE_NAME = 'audio_files';
 
 function openDatabase() {
