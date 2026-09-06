@@ -35,3 +35,4 @@ D:\Projects\Github repositary\Vernacular-LLM\Vernacular.Server\obj\Debug\net10.0
 D:\Projects\Github repositary\Vernacular-LLM\Vernacular.Server\obj\Debug\net10.0\Vernacular.Server.pdb
 D:\Projects\Github repositary\Vernacular-LLM\Vernacular.Server\obj\Debug\net10.0\Vernacular.Server.genruntimeconfig.cache
 D:\Projects\Github repositary\Vernacular-LLM\Vernacular.Server\obj\Debug\net10.0\ref\Vernacular.Server.dll
+D:\Projects\Github repositary\Vernacular-LLM\Vernacular.Server\obj\Debug\net10.0\Vernacular.Server.sourcelink.json
