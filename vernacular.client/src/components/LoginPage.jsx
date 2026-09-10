@@ -11,7 +11,7 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberDevice, setRememberDevice] = useState(false);
 
-  const roles = ['Teacher', 'Student', 'Principal'];
+  const roles = ['Teacher', 'Student'];
 
   const handleSignIn = async (e) => {
     e.preventDefault();
@@ -28,8 +28,6 @@ export default function LoginPage() {
       navigate('/teacherDashboard');
     } else if (selectedRole === 'Student') {
       navigate('/studentDashboard');
-    } else if (selectedRole === 'Principal') {
-      navigate('/principalDashboard');
     }
   };
 
@@ -63,7 +61,6 @@ export default function LoginPage() {
               >
                 {role === 'Teacher' && '👨‍🏫'}
                 {role === 'Student' && '👤'}
-                {role === 'Principal' && '📋'}
                 <span>{role}</span>
               </button>
             ))}
@@ -141,6 +138,18 @@ export default function LoginPage() {
           <button type="submit" className="sign-in-button">
             Sign In as {selectedRole} →
           </button>
+
+          {/* Sign Up Link */}
+          <div className="signup-section">
+            <span className="signup-text">Don't have an account?</span>
+            <button
+              type="button"
+              className="signup-button"
+              onClick={() => navigate('/signup')}
+            >
+              Sign up
+            </button>
+          </div>
         </form>
 
         {/* Security Info */}

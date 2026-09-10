@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/Solution Items/">
+    <File Path=".env.local" />
     <File Path=".gitignore" />
     <File Path="README.md" />
   </Folder>

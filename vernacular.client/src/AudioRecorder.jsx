@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { saveAudioRecording, getRecordingById } from './db';
+import { saveAudioRecording, getRecordingById } from './functions/IndexedDB';
 
 export default function AudioRecorder() {
   const [isRecording, setIsRecording] = useState(false);
