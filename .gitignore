@@ -8,5 +8,6 @@ node_modules/
 .env.local
 
 # OBJ Folder from the C#
-
-!.server/obj/
+**/obj/
+!vernacular.server/obj/
+!vernacular.server/bin/Debug/net10.0
