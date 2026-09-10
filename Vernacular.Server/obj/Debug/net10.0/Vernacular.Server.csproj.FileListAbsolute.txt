@@ -28,7 +28,6 @@ D:\Projects\Github repositary\Vernacular-LLM\Vernacular.Server\obj\Debug\net10.0
 D:\Projects\Github repositary\Vernacular-LLM\Vernacular.Server\obj\Debug\net10.0\staticwebassets.development.json
 D:\Projects\Github repositary\Vernacular-LLM\Vernacular.Server\obj\Debug\net10.0\staticwebassets.build.endpoints.json
 D:\Projects\Github repositary\Vernacular-LLM\Vernacular.Server\obj\Debug\net10.0\swae.build.ex.cache
-D:\Projects\Github repositary\Vernacular-LLM\Vernacular.Server\obj\Debug\net10.0\staticwebassets.upToDateCheck.txt
 D:\Projects\Github repositary\Vernacular-LLM\Vernacular.Server\obj\Debug\net10.0\Vernacul.6B9A0B1B.Up2Date
 D:\Projects\Github repositary\Vernacular-LLM\Vernacular.Server\obj\Debug\net10.0\Vernacular.Server.dll
 D:\Projects\Github repositary\Vernacular-LLM\Vernacular.Server\obj\Debug\net10.0\refint\Vernacular.Server.dll
@@ -170,3 +169,4 @@ D:\Projects\Github repositary\Vernacular-LLM\Vernacular.Server\bin\Debug\net10.0
 D:\Projects\Github repositary\Vernacular-LLM\Vernacular.Server\bin\Debug\net10.0\runtimes\win-x86\native\msalruntime_x86.dll
 D:\Projects\Github repositary\Vernacular-LLM\Vernacular.Server\bin\Debug\net10.0\DotNetEnv.dll
 D:\Projects\Github repositary\Vernacular-LLM\Vernacular.Server\bin\Debug\net10.0\Superpower.dll
+D:\Projects\Github repositary\Vernacular-LLM\Vernacular.Server\obj\Debug\net10.0\staticwebassets.upToDateCheck.txt

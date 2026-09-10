@@ -64,9 +64,9 @@ export default function RecordingInterface() {
     // Assuming format: YY[CLASS][CODE][NUMBER]
     if (roll.length >= 3) {
       const gradeMatch = roll.match(/\D(\d+)\D/);
-      return gradeMatch ? `Grade ${gradeMatch[1]}-B` : 'Grade 10-B';
+      return gradeMatch ? `Grade ${gradeMatch[1]}-B` : 'Grade ***';
     }
-    return 'Grade 10-B';
+    return 'Grade ***';
   };
 
   const getSectionFromRollNumber = (roll) => {
@@ -74,7 +74,7 @@ export default function RecordingInterface() {
     if (roll.length >= 2) {
       return `SEC: ${roll.substring(2, 4).toUpperCase()}`;
     }
-    return 'SEC: 10-B';
+    return 'SEC: ***';
   };
 
   const formatTime = (date) => {
@@ -565,7 +565,8 @@ export default function RecordingInterface() {
                 <span className="ai-scoring-badge">AI SCORING ACTIVATED</span>
               </div>
               <p className="assessment-text">
-                Reading comprehension & pronunciation assessment for chapter 4 dialogue.
+                              This section is for the audio assessment content that is to be filled by the teacher as 
+                per the syllabus.
               </p>
             </div>
           </div>

@@ -6,3 +6,7 @@ node_modules/
 
 .env
 .env.local
+
+# OBJ Folder from the C#
+
+**/obj/

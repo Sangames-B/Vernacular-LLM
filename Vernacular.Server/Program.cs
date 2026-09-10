@@ -23,6 +23,44 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+// =========================================================================================
+// Health Check Endpoint: Database Connection Test
+// Route: GET /api/test-db
+// Purpose:
+//   Instantiates SkillZdbContext and invokes CanConnect() against SQL Server.
+//   This verifies that:
+//     1. The .env.local file in the root directory is located and parsed correctly.
+//     2. The connection string DB_Connection_String is valid and reachable.
+//     3. SQL Server accepts the connection and the target database (SkillZDB) exists.
+// Returns:
+//   200 OK with success JSON if connected, or 500 Problem with detailed error message.
+// =========================================================================================
+app.MapGet("/api/test-db", () =>
+{
+    try
+    {
+        using var db = new Vernacular.Server.Models.SkillZdbContext();
+        bool canConnect = db.Database.CanConnect();
+
+        return canConnect
+            ? Results.Ok(new
+            {
+                status = "Success",
+                message = "Database connected successfully!",
+                timestamp = DateTime.UtcNow
+            })
+            : Results.Problem(
+                detail: "Database connection failed: The server could not establish a connection to SQL Server.",
+                statusCode: 500);
+    }
+    catch (Exception ex)
+    {
+        return Results.Problem(
+            detail: $"Database connection error: {ex.Message}",
+            statusCode: 500);
+    }
+});
+
 app.MapFallbackToFile("/index.html");
 
 app.Run();
