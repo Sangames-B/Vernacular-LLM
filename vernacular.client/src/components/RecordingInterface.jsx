@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { saveAudioRecording, getRecordingsByStudentId, getAllRecordings, deleteRecording } from '../functions/IndexedDB';
+import { saveAudioRecording, getRecordingsByStudentId, getAllRecordings, deleteRecording, updateRecording } from '../functions/IndexedDB';
 import './RecordingInterface.css';
 import micLogo from '../assets/Mic_Logo.png';
 
@@ -406,26 +406,116 @@ export default function RecordingInterface() {
     }
   };
 
-  // Sync recordings handler
+  // Helper to upload a single recording to C# backend -> SQL Server
+  const uploadRecordingToServer = async (recording) => {
+    const formData = new FormData();
+    const fileExtension = recording.fileType?.includes('webm') ? 'webm' : 'wav';
+    const fileName = `${recording.studentId || 'student'}_${recording.id}.${fileExtension}`;
+
+    formData.append('audioFile', recording.audio, fileName);
+    formData.append('rollNumber', recording.studentId || 'UNKNOWN');
+
+    const durSec = parseDuration(recording.metadata?.duration);
+    formData.append('durationSeconds', durSec > 0 ? durSec : 1);
+
+    const response = await fetch('/api/AudioRecordings/upload', {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(errorText || `Server responded with status ${response.status}`);
+    }
+
+    const data = await response.json();
+    recording.isSynced = true;
+    recording.serverRecordingId = data.recordingId;
+    recording.serverAudioPath = data.audioFilePath;
+    recording.syncedAt = data.savedAt || new Date().toISOString();
+
+    await updateRecording(recording);
+    return data;
+  };
+
+  // Sync recordings handler: transfers IndexedDB records to C# backend -> SQL Server
   const handleSyncRecordings = async () => {
     if (isSyncing) return;
-    setIsSyncing(true);
+
+    if (!navigator.onLine) {
+      alert('You are currently offline. Recordings are safely stored in IndexedDB and will sync once connected to the network.');
+      return;
+    }
+
     try {
-      if (!navigator.onLine) {
-        alert('You are currently offline. Recordings are safely stored in IndexedDB and will sync once connected to the network.');
+      setIsSyncing(true);
+
+      // Get all recordings from IndexedDB
+      const allLocal = await getAllRecordings();
+
+      if (!allLocal || allLocal.length === 0) {
+        alert('No recordings found in IndexedDB to sync.');
         setIsSyncing(false);
         return;
       }
-      // Reload recordings from IndexedDB and simulate sync
-      await loadRecordings();
-      setTimeout(() => {
+
+      // Filter to find recordings that haven't been synced yet
+      const unsyncedRecordings = allLocal.filter((rec) => !rec.isSynced);
+
+      if (unsyncedRecordings.length === 0) {
+        alert(`All ${allLocal.length} recording(s) are already synced to the SQL Server database!`);
         setIsSyncing(false);
-        alert('Sync completed: All recordings from IndexedDB are synchronized!');
-      }, 700);
+        return;
+      }
+
+      let successCount = 0;
+      let failCount = 0;
+
+      for (let i = 0; i < unsyncedRecordings.length; i++) {
+        const recording = unsyncedRecordings[i];
+        try {
+          await uploadRecordingToServer(recording);
+          successCount++;
+        } catch (err) {
+          console.error(`Error syncing recording ID ${recording.id}:`, err);
+          failCount++;
+        }
+      }
+
+      // Reload recordings to reflect updated sync statuses
+      await loadRecordings();
+
+      if (failCount === 0) {
+        alert(`✅ Successfully synced ${successCount} recording(s) to the database!`);
+      } else {
+        alert(`Synced ${successCount} recording(s) to database. (${failCount} failed to sync). Check console for details.`);
+      }
     } catch (err) {
-      console.error('Sync failed:', err);
+      console.error('Sync process error:', err);
+      alert('Sync failed due to an unexpected error. Please try again.');
+    } finally {
       setIsSyncing(false);
-      alert('Sync failed. Please try again.');
+    }
+  };
+
+  // Single recording sync handler
+  const handleSyncSingle = async (recording) => {
+    if (isSyncing) return;
+    if (!navigator.onLine) {
+      alert('You are currently offline. Recording will sync once connected to the network.');
+      return;
+    }
+
+    try {
+      setIsSyncing(true);
+      await uploadRecordingToServer(recording);
+      await loadRecordings();
+      alert(`✅ Recording #${recording.id} (${recording.studentId}) synced successfully to the database!`);
+    } catch (err) {
+      console.error('Single sync failed:', err);
+      alert('Failed to sync recording to the database. Please try again.');
+    } finally {
+      setIsSyncing(false);
     }
   };
 
@@ -627,6 +717,7 @@ export default function RecordingInterface() {
                       index={index}
                       recording={recording}
                       onDelete={handleDeleteRecording}
+                      onSyncSingle={handleSyncSingle}
                     />
                   ))
                 ) : (
@@ -659,7 +750,7 @@ function parseDuration(str) {
 }
 
 // Subcomponent for each saved recording voice player
-function SavedAudioPlayer({ recording, index, onDelete }) {
+function SavedAudioPlayer({ recording, index, onDelete, onSyncSingle }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -740,6 +831,15 @@ function SavedAudioPlayer({ recording, index, onDelete }) {
         </div>
         <div className="recording-header-actions">
           <span className="recording-duration">{displayDuration}</span>
+          {!recording.isSynced && onSyncSingle && (
+            <button
+              className="single-sync-btn"
+              onClick={() => onSyncSingle(recording)}
+              title="Sync this recording to SQL Server database"
+            >
+              ☁️ Sync
+            </button>
+          )}
           <button
             className="delete-rec-btn"
             onClick={() => onDelete(recording.id)}
@@ -807,10 +907,23 @@ function SavedAudioPlayer({ recording, index, onDelete }) {
         {recording.metadata?.period && (
           <span className="badge-period">{recording.metadata.period}</span>
         )}
+        {recording.isSynced ? (
+          <span className="badge-synced" title={`Synced to Database (Server ID: ${recording.serverRecordingId || 'Saved'})`}>
+            ✓ Synced {recording.serverRecordingId ? `(DB #${recording.serverRecordingId})` : ''}
+          </span>
+        ) : (
+          <span className="badge-local" title="Stored locally in browser IndexedDB, not yet uploaded to SQL Server">
+            ● Local Only
+          </span>
+        )}
       </div>
 
       <div className="recording-footer">
-        <span className="db-badge">💾 Stored in IndexedDB</span>
+        {recording.isSynced ? (
+          <span className="db-badge db-badge-synced">✅ Synced to SQL Server</span>
+        ) : (
+          <span className="db-badge">💾 Stored in IndexedDB</span>
+        )}
         {audioUrl && (
           <a
             href={audioUrl}

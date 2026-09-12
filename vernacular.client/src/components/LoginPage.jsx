@@ -153,13 +153,6 @@ export default function LoginPage() {
         </form>
 
         {/* Security Info */}
-        <div className="security-info">
-          <span className="security-icon">🔐</span>
-          <span className="security-text">
-            FERPA & STUDENT PRIVACY COMPLIANT • 256-BIT ENCRYPTION
-          </span>
-        </div>
-
         {/* Footer Links */}
         <div className="footer-links">
           <a href="#">Help Center</a>

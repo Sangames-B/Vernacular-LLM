@@ -155,4 +155,29 @@ export function getAllRecordings() {
   );
 }
 
+// Update an existing audio record (e.g. mark as synced with server id)
+export function updateRecording(recording) {
+  if (!recording || !recording.id) {
+    return Promise.reject(new Error('Valid recording with id is required to update'));
+  }
+
+  return openDatabase().then((db) =>
+    new Promise((resolve, reject) => {
+      const tx = db.transaction(STORE_NAME, 'readwrite');
+      const store = tx.objectStore(STORE_NAME);
+      const req = store.put(recording);
+
+      req.onsuccess = () => {
+        resolve(true);
+        db.close();
+      };
+      req.onerror = () => {
+        reject(req.error || new Error('Failed to update recording in IndexedDB'));
+        db.close();
+      };
+    })
+  );
+}
+
+
 
