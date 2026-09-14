@@ -1270,3 +1270,77 @@
     width: 100%;
   }
 }
+
+/* ===== VIEW STUDENT REPORT BUTTON ===== */
+.view-report-button-wrapper {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.view-report-btn {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+.view-report-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.view-report-btn:disabled {
+  background: #cbd5e1;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 0 2px 8px rgba(203, 213, 225, 0.2);
+}
+
+.view-report-btn:active {
+  transform: translateY(0);
+}
+
+/* View Student Report Button */
+.view-report-button-wrapper {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.view-report-btn {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+.view-report-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.view-report-btn:disabled {
+  background: #cbd5e1;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 0 2px 8px rgba(203, 213, 225, 0.2);
+}
+
+.view-report-btn:active {
+  transform: translateY(0);
+}

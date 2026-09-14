@@ -586,6 +586,23 @@ export default function RecordingInterface() {
                   onChange={(e) => setRollNumber(e.target.value.toUpperCase())}
                 />
               </div>
+              {/* View Student Report Button */}
+              <div className="view-report-button-wrapper">
+                <button
+                  type="button"
+                  className="view-report-btn"
+                  onClick={() => {
+                    if (!rollNumber || rollNumber.trim() === '') {
+                      alert('Please enter a student roll number first');
+                      return;
+                    }
+                    navigate(`/${rollNumber.trim()}_Report`);
+                  }}
+                  title="View student report"
+                >
+                  📊 View Student Report
+                </button>
+              </div>
               <div className="student-details-row">
                 <span className="verified-badge">✓ Verified: {rollNumber || 'Student Name'}</span>
                 <span className="grade-info">{getGradeFromRollNumber(rollNumber)}</span>
