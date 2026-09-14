@@ -10,14 +10,7 @@ namespace Vernacular.Server.Agents
     public class ReadingAssessmentAgent
     {
         private readonly HttpClient _httpClient;
-        private readonly string _apiKey = "HF_Token"; // To be replaced by .env.local value later
-        private readonly string _modelName = "openai/whisper-large-v3";
-        // Using the OpenAI-compatible audio transcriptions endpoint on the Hugging Face router
-        private readonly string _routerEndpoint = "https://router.huggingface.co/v1/audio/transcriptions";
-
-        // "System prompt" for the Whisper model. 
-        // While Whisper isn't an LLM, it uses the 'prompt' parameter to guide context, vocabulary, and punctuation.
-        private readonly string _systemPrompt = "This is a clear recording of a student reading an educational passage in a regional Indian language. Please provide an accurate transcription with proper punctuation and spelling.";
+        private readonly string _endpoint = "https://router.huggingface.co/hf-inference/models/openai/whisper-large-v3";
 
         public ReadingAssessmentAgent(HttpClient httpClient)
         {
@@ -26,26 +19,22 @@ namespace Vernacular.Server.Agents
 
         public async Task<string> TranscribeAudioAsync(Stream audioStream, string fileName)
         {
-            using var request = new HttpRequestMessage(HttpMethod.Post, _routerEndpoint);
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _apiKey);
+            var apiKey = GetHfToken();
+            if (string.IsNullOrWhiteSpace(apiKey) || apiKey == "HF_Token")
+            {
+                throw new Exception("Hugging Face token is missing or still set to 'HF_Token'. Please set HF_TOKEN in your .env.local file.");
+            }
 
-            using var content = new MultipartFormDataContent();
-            
-            // Add the model parameter
-            content.Add(new StringContent(_modelName), "model");
-            
-            // Add the system prompt to guide the transcription
-            content.Add(new StringContent(_systemPrompt), "prompt");
+            using var request = new HttpRequestMessage(HttpMethod.Post, _endpoint);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
 
-            // Add the audio file (adjust content type depending on the file format you send)
-            var streamContent = new StreamContent(audioStream);
+            // Hugging Face inference API accepts the raw binary audio stream directly
+            using var streamContent = new StreamContent(audioStream);
             streamContent.Headers.ContentType = new MediaTypeHeaderValue("audio/wav");
-            content.Add(streamContent, "file", fileName);
-
-            request.Content = content;
+            request.Content = streamContent;
 
             var response = await _httpClient.SendAsync(request);
-            
+
             if (!response.IsSuccessStatusCode)
             {
                 var errorResponse = await response.Content.ReadAsStringAsync();
@@ -54,13 +43,59 @@ namespace Vernacular.Server.Agents
 
             var responseJson = await response.Content.ReadAsStringAsync();
             using var jsonDocument = JsonDocument.Parse(responseJson);
-            
+
+            // Hugging Face Whisper returns: {"text": "transcribed text here"}
             if (jsonDocument.RootElement.TryGetProperty("text", out var textElement))
             {
                 return textElement.GetString() ?? string.Empty;
             }
 
-            return string.Empty;
+            return responseJson;
+        }
+
+        private static string? GetHfToken()
+        {
+            // 1. Check environment variables
+            var envVar = Environment.GetEnvironmentVariable("HF_TOKEN")
+                      ?? Environment.GetEnvironmentVariable("HF_Token");
+            if (!string.IsNullOrWhiteSpace(envVar)) return envVar;
+
+            // 2. Search upwards for .env.local file (matching SkillZdbContext pattern)
+            var dir = new DirectoryInfo(Directory.GetCurrentDirectory());
+            while (dir != null)
+            {
+                var filePath = Path.Combine(dir.FullName, ".env.local");
+                if (File.Exists(filePath))
+                {
+                    var val = ReadKeyFromFile(filePath, "HF_TOKEN") ?? ReadKeyFromFile(filePath, "HF_Token");
+                    if (!string.IsNullOrWhiteSpace(val)) return val;
+                }
+                dir = dir.Parent;
+            }
+
+            return null;
+        }
+
+        private static string? ReadKeyFromFile(string filePath, string key)
+        {
+            foreach (var line in File.ReadAllLines(filePath))
+            {
+                var trimmed = line.Trim();
+                if (string.IsNullOrEmpty(trimmed) || trimmed.StartsWith("#"))
+                    continue;
+
+                var separatorIndex = trimmed.IndexOf('=');
+                if (separatorIndex > 0)
+                {
+                    var lineKey = trimmed.Substring(0, separatorIndex).Trim();
+                    if (string.Equals(lineKey, key, StringComparison.OrdinalIgnoreCase))
+                    {
+                        var val = trimmed.Substring(separatorIndex + 1).Trim();
+                        return val.Trim('"', '\'');
+                    }
+                }
+            }
+            return null;
         }
     }
 }
