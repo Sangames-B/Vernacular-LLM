@@ -3,6 +3,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+// Register the ReadingAssessmentAgent with a typed HttpClient
+builder.Services.AddHttpClient<Vernacular.Server.Agents.ReadingAssessmentAgent>();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
@@ -60,6 +62,25 @@ app.MapGet("/api/test-db", () =>
             statusCode: 500);
     }
 });
+
+// =========================================================================================
+// Whisper AI Test Endpoint
+// Route: POST /api/test-whisper
+// Purpose: Quick way to test if the Whisper AI is successfully transcribing an uploaded audio file.
+// =========================================================================================
+app.MapPost("/api/test-whisper", async (Microsoft.AspNetCore.Http.IFormFile file, Vernacular.Server.Agents.ReadingAssessmentAgent agent) =>
+{
+    try
+    {
+        using var stream = file.OpenReadStream();
+        var transcription = await agent.TranscribeAudioAsync(stream, file.FileName);
+        return Results.Ok(new { status = "Success", transcription });
+    }
+    catch (Exception ex)
+    {
+        return Results.Problem(detail: ex.Message, statusCode: 500);
+    }
+}).DisableAntiforgery();
 
 app.MapFallbackToFile("/index.html");
 
